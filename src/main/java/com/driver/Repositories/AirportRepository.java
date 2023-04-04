@@ -171,7 +171,7 @@ public class AirportRepository {
             return "FAILURE";
 
         Passenger passenger=passengerDb.get(passengerId);
-        if(passengerList.contains(passenger)){
+        if(!passengerList.contains(passenger)){
             return "FAILURE";
         }
 
