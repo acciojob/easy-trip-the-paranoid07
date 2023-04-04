@@ -81,7 +81,7 @@ public class AirportRepository {
     public int getNumberOfPeopleOn(Date date, String airportName){
 
         //Calculate the total number of people who have flights on that day on a particular airport
-        //This includes both the people who have come for a flight and who have landed on an airport after their flight
+        //This includes both the people who have come for a  flight and who have landed on an airport after their flight
         if(!airportDb.containsKey(airportName))
             return 0;
 
@@ -90,13 +90,12 @@ public class AirportRepository {
 
         int count=0;
 
-        for(Integer flightId:flightDb.keySet()) {
-            if (flightPassengerDb.containsKey(flightId)) {
+        for(Integer flightId:flightPassengerDb.keySet()) {
                 Flight flight=flightDb.get(flightId);
-                if (flight.getFlightDate() == date && flight.getToCity() == cityAirport)
+                if (flight.getFlightDate() == date && (flight.getToCity() == cityAirport || flight.getFromCity() == cityAirport))
                     count+=flightPassengerDb.get(flightId).size();
             }
-        }
+
 
 
 
