@@ -90,10 +90,12 @@ public class AirportRepository {
 
         int count=0;
 
-        for(Flight flight:flightDb.values()){
-            Date flightDate=flight.getFlightDate();
-            if(flightDate == date && flight.getToCity() == cityAirport )
-                count++;
+        for(Integer flightId:flightDb.keySet()) {
+            if (flightPassengerDb.containsKey(flightId)) {
+                Flight flight=flightDb.get(flightId);
+                if (flight.getFlightDate() == date && flight.getToCity() == cityAirport)
+                    count+=flightPassengerDb.get(flightId).size();
+            }
         }
 
 
