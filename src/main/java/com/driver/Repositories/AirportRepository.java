@@ -12,11 +12,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-@Repository
+
 public class AirportRepository {
 
     HashMap<Integer,Passenger>passengerDb=new HashMap<>();
-    HashMap<City[],Flight>cityFlightDb=new HashMap<>();
     HashMap<String,Airport> airportDb=new HashMap<>();
     HashMap<Integer, HashSet<Passenger>> flightPassengerDb=new HashMap<>();
     HashMap<Integer,Flight>flightDb=new HashMap<>();
