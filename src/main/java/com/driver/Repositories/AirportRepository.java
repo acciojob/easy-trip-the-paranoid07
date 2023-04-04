@@ -82,23 +82,34 @@ public class AirportRepository {
 
         //Calculate the total number of people who have flights on that day on a particular airport
         //This includes both the people who have come for a  flight and who have landed on an airport after their flight
+       // System.out.println("Entered function");
         if(!airportDb.containsKey(airportName))
             return 0;
+
+       // System.out.println("Passed first chek");
 
         Airport airport=airportDb.get(airportName);
         City cityAirport=airport.getCity();
 
         int count=0;
 
+
         for(Integer flightId:flightPassengerDb.keySet()) {
+           // System.out.println("Entered for loop");
                 Flight flight=flightDb.get(flightId);
-                if (flight.getFlightDate() == date && (flight.getToCity() == cityAirport || flight.getFromCity() == cityAirport))
-                    count+=flightPassengerDb.get(flightId).size();
+           // System.out.println(date +"\n"+flight.getFlightDate()+"\n"+flight.getToCity()+"\n"+flight.getFromCity());
+            //System.out.println(flight.getFlightDate().toString().equals(date.toString())+"   "+
+                 //   flight.getToCity().toString().equals(cityAirport.toString())+"   "+flight.getFromCity().toString().equals(cityAirport.toString()));
+                if (flight.getFlightDate().toString().equals(date.toString()) &&
+                        (flight.getToCity().toString().equals(cityAirport.toString()) || flight.getFromCity().toString().equals(cityAirport.toString()))) {
+                   // System.out.println("Entered if condition");
+                    count += flightPassengerDb.get(flightId).size();
+                }
             }
 
 
 
-
+        //System.out.println("Returning count");
         return count;
     }
 
