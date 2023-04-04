@@ -124,11 +124,19 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
+        if(!flightDb.containsKey(flightId))
+            return "FAILURE";
+
         if(!(flightPassengerDb.containsKey(flightId))){
             Passenger passenger=passengerDb.get(passengerId);
             HashSet<Passenger>passengerList=new HashSet<>();
             passengerList.add(passenger);
             flightPassengerDb.put(flightId,passengerList);
+
+            int ticketsAlreadyBooked=flightDb.get(flightId).getTicketsBooked();
+            flightDb.get(flightId).setTicketsBooked(ticketsAlreadyBooked+1);
+
+            return "SUCCESS";
         }
 
         Passenger passenger=passengerDb.get(passengerId);
@@ -156,6 +164,10 @@ public class AirportRepository {
             return "FAILURE";
 
         HashSet<Passenger>passengerList=flightPassengerDb.get(flightId);
+
+        if(passengerList.size() == 0)
+            return "FAILURE";
+
         Passenger passenger=passengerDb.get(passengerId);
         if(passengerList.contains(passenger)){
             return "FAILURE";
