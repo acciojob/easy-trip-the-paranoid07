@@ -124,8 +124,13 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
-        if(!(flightPassengerDb.containsKey(flightId)))
-            return "FAILURE";
+        if(!(flightPassengerDb.containsKey(flightId))){
+            Passenger passenger=passengerDb.get(passengerId);
+            HashSet<Passenger>passengerList=new HashSet<>();
+            passengerList.add(passenger);
+            flightPassengerDb.put(flightId,passengerList);
+        }
+
         Passenger passenger=passengerDb.get(passengerId);
         if(flightPassengerDb.get(flightId).size() > flightDb.get(flightId).getMaxCapacity() || flightPassengerDb.containsValue(passenger))
             return "FAILURE";
@@ -134,8 +139,8 @@ public class AirportRepository {
         HashSet<Passenger>passengerList=flightPassengerDb.get(flightId);
         passengerList.add(passengerDb.get(passengerId));
 
-        int ticketsBooked=flightDb.get(flightId).getTicketsBooked();
-        flightDb.get(flightId).setTicketsBooked(ticketsBooked+1);
+        int ticketsAlreadyBooked=flightDb.get(flightId).getTicketsBooked();
+        flightDb.get(flightId).setTicketsBooked(ticketsAlreadyBooked+1);
 
         return "SUCCESS";
     }
@@ -147,10 +152,12 @@ public class AirportRepository {
         // then return a "FAILURE" message
         // Otherwise return a "SUCCESS" message
         // and also cancel the ticket that passenger had booked earlier on the given flightId
+        if(!(flightPassengerDb.containsKey(flightId)) || !(passengerDb.containsKey(passengerId)))
+            return "FAILURE";
+
         HashSet<Passenger>passengerList=flightPassengerDb.get(flightId);
         Passenger passenger=passengerDb.get(passengerId);
-
-        if(!(flightPassengerDb.containsKey(flightId)) || passengerList.contains(passenger)){
+        if(passengerList.contains(passenger)){
             return "FAILURE";
         }
 
@@ -165,8 +172,13 @@ public class AirportRepository {
 
         //Tell the count of flight bookings done by a passenger: This will tell the total count of flight bookings done by a passenger :
         int count=0;
+        if(!passengerDb.containsKey(passengerId))
+            return count;
+
+        Passenger passenger=passengerDb.get(passengerId);
+
         for(HashSet<Passenger> passengerList: flightPassengerDb.values()){
-            Passenger passenger=passengerDb.get(passengerId);
+
             if(passengerList.contains(passenger))
                 count++;
         }
@@ -189,10 +201,14 @@ public class AirportRepository {
 
         //We need to get the starting airportName from where the flight will be taking off (Hint think of City variable if that can be of some use)
         //return null incase the flightId is invalid or you are not able to find the airportName
+
         if(flightDb.containsKey(flightId)) {
             Flight flight = flightDb.get(flightId);
-            City airportName = flight.getFromCity();
-            return airportName.toString();
+            City fromCityOfFlight=flight.getFromCity();
+            for(Airport airport: airportDb.values()){
+                if(airport.getCity() == fromCityOfFlight)
+                    return airport.getAirportName();
+            }
         }
 
         return null;
