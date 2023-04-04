@@ -82,12 +82,17 @@ public class AirportRepository {
 
         //Calculate the total number of people who have flights on that day on a particular airport
         //This includes both the people who have come for a flight and who have landed on an airport after their flight
+        if(!airportDb.containsKey(airportName))
+            return 0;
+
         Airport airport=airportDb.get(airportName);
         City cityAirport=airport.getCity();
+
         int count=0;
 
         for(Flight flight:flightDb.values()){
-            if(flight.getToCity() == cityAirport )
+            int flightDate=flight.getFlightDate();
+            if(flightDate == date && flight.getToCity() == cityAirport )
                 count++;
         }
 
@@ -119,6 +124,8 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
+        if(!(flightPassengerDb.containsKey(flightId)))
+            return "FAILURE";
         Passenger passenger=passengerDb.get(passengerId);
         if(flightPassengerDb.get(flightId).size() > flightDb.get(flightId).getMaxCapacity() || flightPassengerDb.containsValue(passenger))
             return "FAILURE";
