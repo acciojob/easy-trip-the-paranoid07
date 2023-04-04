@@ -91,7 +91,7 @@ public class AirportRepository {
         int count=0;
 
         for(Flight flight:flightDb.values()){
-            int flightDate=flight.getFlightDate();
+            Date flightDate=flight.getFlightDate();
             if(flightDate == date && flight.getToCity() == cityAirport )
                 count++;
         }
